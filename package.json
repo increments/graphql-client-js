@@ -8,7 +8,9 @@
   "author": "Yuku TAKAHASHI <yuku@qiita.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "run-p build:*",
+    "build:es2015": "tsc",
+    "build:es5": "rollup -c",
     "format": "run-s format:tslint format:prettier",
     "format:prettier": "prettier --no-semi --trailing-comma all --parser typescript --write 'src/*.ts'",
     "format:tslint": "tslint --fix -p .",
@@ -19,6 +21,8 @@
   "devDependencies": {
     "npm-run-all": "^4.1.2",
     "prettier": "^1.11.1",
+    "rollup": "^0.56.4",
+    "rollup-plugin-typescript2": "^0.11.1",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.9.0",
     "typescript": "^2.7.2"
