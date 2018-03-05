@@ -2,11 +2,22 @@
   "name": "@increments/graphql-client",
   "version": "0.0.0",
   "description": "A lightweight GraphQL client",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "repository": "git@github.com:increments/graphql-client.git",
   "author": "Yuku TAKAHASHI <yuku@qiita.com>",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "format": "run-s format:tslint format:prettier",
+    "format:prettier": "prettier --no-semi --trailing-comma all --parser typescript --write 'src/*.ts'",
+    "format:tslint": "tslint --fix -p .",
+    "lint": "run-p lint:*",
+    "lint:prettier": "prettier --no-semi --trailing-comma all -l --parser typescript 'src/*.ts' || (echo 'Need to run `yarn run format`' && exit 1)",
+    "lint:tslint": "tslint --project ."
+  },
   "devDependencies": {
+    "npm-run-all": "^4.1.2",
     "prettier": "^1.11.1",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.9.0",
