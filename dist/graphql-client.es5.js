@@ -130,4 +130,4 @@ exports.GraphQLClient = GraphQLClient;
 return exports;
 
 }({}));
-//# sourceMappingURL=index.es5.js.map
+//# sourceMappingURL=graphql-client.es5.js.map
