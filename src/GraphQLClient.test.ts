@@ -6,9 +6,9 @@ describe("GraphQLClient", () => {
     const request = jest.fn()
     const client = new GraphQLClient({ wait: 0, request })
 
-    client.query("", {})
-    client.query("", {})
-    client.query("", {})
+    client.query("")
+    client.query("")
+    client.query("")
 
     setTimeout(() => {
       expect(request.mock.calls.length).toBe(1)
@@ -75,8 +75,7 @@ describe("GraphQLClient", () => {
       })
       .then(spy1)
     const spy2 = jest.fn()
-    // TODO: Make variables argument optional
-    client.query("viewer { name }", {}).then(spy2)
+    client.query("viewer { name }").then(spy2)
 
     setTimeout(() => {
       expect(spy1.mock.calls.length).toBe(1)
@@ -129,8 +128,8 @@ describe("GraphQLClient", () => {
     const request = jest.fn()
     const client = new GraphQLClient({ wait: 0, request })
 
-    client.query("", {})
-    client.mutation("", {})
+    client.query("")
+    client.mutation("")
 
     setTimeout(() => {
       expect(request.mock.calls.length).toBe(2)

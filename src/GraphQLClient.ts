@@ -1,4 +1,5 @@
 import {
+  Error,
   OperationName,
   RequestHandler,
   RequestParams,
@@ -24,11 +25,17 @@ export class GraphQLClient {
     this.request = options.request
   }
 
-  public query<T>(query: string, decls: VariableDecls): Promise<T> {
+  public query<T>(
+    query: string,
+    decls: VariableDecls = {},
+  ): Promise<{ data?: T; errors?: Error[] }> {
     return this.buffer("query", query, decls)
   }
 
-  public mutation<T>(query: string, decls: VariableDecls): Promise<T> {
+  public mutation<T>(
+    query: string,
+    decls: VariableDecls = {},
+  ): Promise<{ data?: T; errors?: Error[] }> {
     return this.buffer("mutation", query, decls)
   }
 

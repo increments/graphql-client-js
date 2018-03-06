@@ -6,9 +6,12 @@ export type RequestHandler = (
   success: SuccessCallback,
   errors: ErrorsCallback,
 ) => void
-
-export type SuccessCallback = (resp: { data?: any; errors?: any }) => void
-export type ErrorsCallback = (message?: string) => void
+export interface Error {
+  message: string
+  fields?: string[]
+}
+export type SuccessCallback = (resp: { data?: any; errors?: Error[] }) => void
+export type ErrorsCallback = (message: string) => void
 export type OperationName = "query" | "mutation"
 
 export interface VariableDecls {
@@ -66,23 +69,55 @@ const createSuccessCallback = (params: RequestParams): SuccessCallback => ({
   data,
   errors,
 }) => {
+  const payloads: { [name: string]: { data?: any; errors?: Error[] } } = {}
+  const nameMap: { [aliasName: string]: string } = {}
+
   if (data) {
     Object.keys(data).forEach(aliasName => {
       const param = params[aliasName]
       const originalName = param.query.split(SELECTION_DELIMITER, 1)[0]
-      param.resolve({ [originalName]: data[aliasName] })
+      payloads[aliasName] = {
+        data: {
+          [originalName]: data[aliasName],
+        },
+      }
+      nameMap[aliasName] = originalName
     })
   }
   if (errors) {
-    // TODO: Implement
+    errors.forEach(error => {
+      if (error.fields && error.fields.length) {
+        const field = error.fields[0]
+        if (!nameMap[field]) {
+          return // Unknown field
+        }
+        if (!payloads[field]) {
+          payloads[field] = {
+            errors: [],
+          }
+        }
+        if (!payloads[field].errors) {
+          payloads[field].errors = []
+        }
+        ;(payloads[field].errors as Error[]).push({
+          message: error.message,
+          fields: [nameMap[field]].concat(error.fields.slice(1)),
+        })
+      }
+    })
   }
+  Object.keys(payloads).forEach(name => {
+    if (params[name]) {
+      params[name].resolve(payloads[name])
+    }
+  })
 }
 
 const createErrorsCallback = (params: RequestParams): ErrorsCallback => (
-  message?: string,
+  ...args: any[]
 ) => {
   Object.keys(params).forEach(aliasName => {
-    params[aliasName].reject(message ? [message] : [])
+    params[aliasName].reject(...args)
   })
 }
 
