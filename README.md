@@ -1,5 +1,7 @@
 # @increments/graphql-client
 
+[![Build Status](https://travis-ci.org/increments/graphql-client-js.svg?branch=master)](https://travis-ci.org/increments/graphql-client-js)
+
 A lightweight GraphQL client which bundles sequence of queries into a single HTTP request. Zero dependency.
 
 ## Installation
