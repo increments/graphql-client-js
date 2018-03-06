@@ -25,12 +25,17 @@ const client = new GraphQLClient({
    * @param {Function} success - Callback for successful response.
    * @param {Function} error - Callback for failure response.
    */
-  request(query, variables, success, error) {
+  handle(query, variables, resolve, reject) {
     // Send a HTTP request to your GraphQL server in your favorite way.
+
+    // Sample:
+    axios.post("/graphql", { query, variables })
+      .then(response => resolve(response.data)
+      .catch(reject)
   }
 })
 
-// The request function will be executed once, even though client.query is called twice.
+// The handle function will be executed once, even though client.query is called twice.
 Promise.all([
   client.query("viewer { name }"),
   client.query(`
@@ -49,10 +54,10 @@ Promise.all([
     }
   ),
 ]).then((
-  { data },
-  { data }
+  viewer,
+  repository,
 ) => {
-  console.log(data.viewer.name)
-  console.log(data.repository.url)
+  console.log(viewer.data.viewer.name)
+  console.log(repository.data.repository.url)
 })
 ```

@@ -1,17 +1,17 @@
 import { uniqId } from "./uniqId"
 
-export type RequestHandler = (
+export type Handler = (
   query: string,
   variables: Variables,
-  success: SuccessCallback,
-  errors: ErrorsCallback,
+  resolve: ResolveCallback,
+  reject: RejectCallback,
 ) => void
 export interface Error {
   message: string
   fields?: string[]
 }
-export type SuccessCallback = (resp: { data?: any; errors?: Error[] }) => void
-export type ErrorsCallback = (message: string) => void
+export type ResolveCallback = (resp: { data?: any; errors?: Error[] }) => void
+export type RejectCallback = (message: string) => void
 export type OperationName = "query" | "mutation"
 
 export interface VariableDecls {
@@ -65,7 +65,7 @@ const buildQueryAndVariables = (
   return { query, variables }
 }
 
-const createSuccessCallback = (params: RequestParams): SuccessCallback => ({
+const createResolveCallback = (params: RequestParams): ResolveCallback => ({
   data,
   errors,
 }) => {
@@ -113,7 +113,7 @@ const createSuccessCallback = (params: RequestParams): SuccessCallback => ({
   })
 }
 
-const createErrorsCallback = (params: RequestParams): ErrorsCallback => (
+const createRejectCallback = (params: RequestParams): RejectCallback => (
   ...args: any[]
 ) => {
   Object.keys(params).forEach(aliasName => {
@@ -124,13 +124,13 @@ const createErrorsCallback = (params: RequestParams): ErrorsCallback => (
 export const sendRequest = (
   name: OperationName,
   params: RequestParams,
-  handler: RequestHandler,
+  handler: Handler,
 ): void => {
   const { query, variables } = buildQueryAndVariables(name, params)
   handler(
     query,
     variables,
-    createSuccessCallback(params),
-    createErrorsCallback(params),
+    createResolveCallback(params),
+    createRejectCallback(params),
   )
 }

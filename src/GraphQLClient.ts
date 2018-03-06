@@ -1,7 +1,7 @@
 import {
   Error,
+  Handler,
   OperationName,
-  RequestHandler,
   RequestParams,
   sendRequest,
   VariableDecls,
@@ -10,7 +10,7 @@ import { uniqId } from "./uniqId"
 
 export class GraphQLClient {
   private wait: number
-  private request: RequestHandler
+  private handle: Handler
   private buffers: { [operation in OperationName]: RequestParams } = {
     query: {},
     mutation: {},
@@ -20,9 +20,9 @@ export class GraphQLClient {
     mutation: null,
   }
 
-  constructor(options: { wait?: number; request: RequestHandler }) {
+  constructor(options: { wait?: number; handle: Handler }) {
     this.wait = options.wait == null ? 50 : options.wait
-    this.request = options.request
+    this.handle = options.handle
   }
 
   public query<T>(
@@ -60,7 +60,7 @@ export class GraphQLClient {
   }
 
   private flush(name: OperationName): void {
-    sendRequest(name, this.buffers[name], this.request)
+    sendRequest(name, this.buffers[name], this.handle)
     this.buffers[name] = {}
     this.timerIds[name] = null
   }

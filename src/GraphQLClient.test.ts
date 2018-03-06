@@ -3,15 +3,15 @@ import { GraphQLClient } from "./GraphQLClient"
 
 describe("GraphQLClient", () => {
   it("bundles sequence of method calls to a single request", done => {
-    const request = jest.fn()
-    const client = new GraphQLClient({ wait: 0, request })
+    const handle = jest.fn()
+    const client = new GraphQLClient({ wait: 0, handle })
 
     client.query("")
     client.query("")
     client.query("")
 
     setTimeout(() => {
-      expect(request.mock.calls.length).toBe(1)
+      expect(handle.mock.calls.length).toBe(1)
       done()
     }, 10)
   })
@@ -19,7 +19,7 @@ describe("GraphQLClient", () => {
   it("calls request with valid graphql query and variables", done => {
     const client = new GraphQLClient({
       wait: 0,
-      request: (query, variables, success) => {
+      handle: (query, variables, resolve) => {
         const ast = parse(query)
 
         // Query should contain only one operation.
@@ -48,7 +48,7 @@ describe("GraphQLClient", () => {
         expect(viewerSelection.name.value).toBe("viewer")
         const viewerAlias = viewerSelection.alias.value
 
-        success({
+        resolve({
           data: {
             [userAlias]: {
               id: "bar",
@@ -105,8 +105,8 @@ describe("GraphQLClient", () => {
   it("rejects all promise by calling errors callback", done => {
     const client = new GraphQLClient({
       wait: 0,
-      request: (query, variables, success, errors) => {
-        errors("hello")
+      handle: (query, variables, resolve, reject) => {
+        reject("hello")
       },
     })
 
@@ -125,14 +125,14 @@ describe("GraphQLClient", () => {
   })
 
   it("treats #query and #mutation separatly", done => {
-    const request = jest.fn()
-    const client = new GraphQLClient({ wait: 0, request })
+    const handle = jest.fn()
+    const client = new GraphQLClient({ wait: 0, handle })
 
     client.query("")
     client.mutation("")
 
     setTimeout(() => {
-      expect(request.mock.calls.length).toBe(2)
+      expect(handle.mock.calls.length).toBe(2)
       done()
     }, 10)
   })
