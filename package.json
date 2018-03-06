@@ -43,6 +43,7 @@
     ],
     "transform": {
       "^.+\\.tsx?$": "./node_modules/ts-jest/preprocessor.js"
-    }
+    },
+    "collectCoverage": true
   }
 }
