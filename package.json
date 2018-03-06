@@ -16,15 +16,32 @@
     "format:tslint": "tslint --fix -p .",
     "lint": "run-p lint:*",
     "lint:prettier": "prettier --no-semi --trailing-comma all -l --parser typescript 'src/*.ts' || (echo 'Need to run `yarn run format`' && exit 1)",
-    "lint:tslint": "tslint --project ."
+    "lint:tslint": "tslint --project .",
+    "test": "jest"
   },
   "devDependencies": {
+    "@types/jest": "^22.2.0",
+    "jest": "^22.4.2",
     "npm-run-all": "^4.1.2",
     "prettier": "^1.11.1",
     "rollup": "^0.56.4",
     "rollup-plugin-typescript2": "^0.11.1",
+    "ts-jest": "^22.4.1",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.9.0",
     "typescript": "^2.7.2"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "tsx"
+    ],
+    "testMatch": [
+      "**/?(*.)test.(js|ts)?(x)"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "./node_modules/ts-jest/preprocessor.js"
+    }
   }
 }
