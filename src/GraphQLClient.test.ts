@@ -1,6 +1,42 @@
 import { parse } from "graphql/language/parser"
 import { GraphQLClient } from "./GraphQLClient"
 
+function shouldContainOnlyOneOperation(ast: any, name: string) {
+  expect(ast.definitions.length).toBe(1)
+  expect(ast.definitions[0].operation).toBe(name)
+}
+
+function shouldDeclareVariables(
+  def: any,
+  expected: { type: string; nonNull: boolean }[],
+) {
+  expect(def.variableDefinitions.length).toBe(1)
+  expected.forEach((e, index) => {
+    if (e.nonNull) {
+      expect(def.variableDefinitions[index].type.kind).toBe("NonNullType")
+    }
+    expect(def.variableDefinitions[index].type.type.name.value).toBe(e.type)
+  })
+}
+
+function shouldHaveSelectionNames(def: any, names: string[]) {
+  expect(def.selectionSet.selections.length).toBe(2)
+  names.forEach((name, index) => {
+    expect(def.selectionSet.selections[index].name.value).toBe(name)
+  })
+}
+
+function shouldHaveVariable(
+  def: any,
+  variables: any,
+  index: number,
+  value: any,
+) {
+  expect(variables[def.variableDefinitions[index].variable.name.value]).toBe(
+    value,
+  )
+}
+
 describe("GraphQLClient", () => {
   it("bundles sequence of method calls to a single request", done => {
     const handle = jest.fn()
@@ -22,31 +58,17 @@ describe("GraphQLClient", () => {
       handle: (query, variables, resolve) => {
         const ast = parse(query)
 
-        // Query should contain only one operation.
-        expect(ast.definitions.length).toBe(1)
-        const def = ast.definitions[0]
-        expect(def.operation).toBe("query")
+        shouldContainOnlyOneOperation(ast, "query")
+        shouldDeclareVariables(ast.definitions[0], [
+          { type: "String", nonNull: true },
+        ])
+        shouldHaveVariable(ast.definitions[0], variables, 0, "foo")
 
-        // There is `$name: String!` only.
-        expect(def.variableDefinitions.length).toBe(1)
-        const varDef = def.variableDefinitions[0]
-        expect(varDef.type.kind).toBe("NonNullType")
-        expect(varDef.type.type.name.value).toBe("String")
-
-        const varName = varDef.variable.name.value
-        // { name: "foo" } was transformed as { [varName]: "foo" } in the query
-        expect(variables[varName]).toBe("foo")
-
-        // There are two selections: user and viewer
-        expect(def.selectionSet.selections.length).toBe(2)
-
-        const userSelection = def.selectionSet.selections[0]
-        expect(userSelection.name.value).toBe("user")
-        const userAlias = userSelection.alias.value
-
-        const viewerSelection = def.selectionSet.selections[1]
-        expect(viewerSelection.name.value).toBe("viewer")
-        const viewerAlias = viewerSelection.alias.value
+        shouldHaveSelectionNames(ast.definitions[0], ["user", "viewer"])
+        const userAlias =
+          ast.definitions[0].selectionSet.selections[0].alias.value
+        const viewerAlias =
+          ast.definitions[0].selectionSet.selections[1].alias.value
 
         resolve({
           data: {
