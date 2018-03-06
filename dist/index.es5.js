@@ -1,12 +1,13 @@
 var GraphQLClient = (function (exports) {
 'use strict';
 
-const SELECTION_DELIMITER = /\s|\(|{/;
 // Generate unique variable name
 const uniqId = (() => {
     let counter = 0;
     return (name) => `${name || "id"}${counter++}`;
 })();
+
+const SELECTION_DELIMITER = /\s|\(|{/;
 const buildQueryAndVariables = (name, params) => {
     const queries = [];
     const variableDefinitions = [];
@@ -48,6 +49,7 @@ const sendRequest = (name, params, handler) => {
     const { query, variables } = buildQueryAndVariables(name, params);
     handler(query, variables, createSuccessCallback(params), createErrorsCallback(params));
 };
+
 class GraphQLClient {
     constructor(options) {
         this.buffers = {
@@ -89,7 +91,6 @@ class GraphQLClient {
     }
 }
 
-exports.sendRequest = sendRequest;
 exports.GraphQLClient = GraphQLClient;
 
 return exports;
