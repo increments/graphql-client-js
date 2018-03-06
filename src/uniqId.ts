@@ -1,5 +1,5 @@
 // Generate unique variable name
 export const uniqId = (() => {
   let counter = 0
-  return (name?: string): string => `${name || "id"}${counter++}`
+  return (name: string): string => `${name}${counter++}`
 })()
