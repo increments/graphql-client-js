@@ -11,12 +11,12 @@ export class GraphQLClient {
             mutation: null,
         };
         this.wait = options.wait == null ? 50 : options.wait;
-        this.request = options.request;
+        this.handle = options.handle;
     }
-    query(query, decls) {
+    query(query, decls = {}) {
         return this.buffer("query", query, decls);
     }
-    mutation(query, decls) {
+    mutation(query, decls = {}) {
         return this.buffer("mutation", query, decls);
     }
     buffer(name, query, decls) {
@@ -35,7 +35,7 @@ export class GraphQLClient {
         });
     }
     flush(name) {
-        sendRequest(name, this.buffers[name], this.request);
+        sendRequest(name, this.buffers[name], this.handle);
         this.buffers[name] = {};
         this.timerIds[name] = null;
     }

@@ -31,23 +31,57 @@ const buildQueryAndVariables = (name, params) => {
     const query = `${name}${defs}{\n${queries.join("\n")}\n}`;
     return { query, variables };
 };
-const createSuccessCallback = (params) => ({ data, errors, }) => {
+const createResolveCallback = (params) => ({ data, errors, }) => {
+    const payloads = {};
+    const nameMap = {};
     if (data) {
         Object.keys(data).forEach(aliasName => {
             const param = params[aliasName];
             const originalName = param.query.split(SELECTION_DELIMITER, 1)[0];
-            param.resolve({ [originalName]: data[aliasName] });
+            payloads[aliasName] = {
+                data: {
+                    [originalName]: data[aliasName],
+                },
+            };
+            nameMap[aliasName] = originalName;
         });
     }
+    if (errors) {
+        errors.forEach(error => {
+            if (error.fields && error.fields.length) {
+                const field = error.fields[0];
+                if (!nameMap[field]) {
+                    return; // Unknown field
+                }
+                if (!payloads[field]) {
+                    payloads[field] = {
+                        errors: [],
+                    };
+                }
+                if (!payloads[field].errors) {
+                    payloads[field].errors = [];
+                }
+                payloads[field].errors.push({
+                    message: error.message,
+                    fields: [nameMap[field]].concat(error.fields.slice(1)),
+                });
+            }
+        });
+    }
+    Object.keys(payloads).forEach(name => {
+        if (params[name]) {
+            params[name].resolve(payloads[name]);
+        }
+    });
 };
-const createErrorsCallback = (params) => (message) => {
+const createRejectCallback = (params) => (...args) => {
     Object.keys(params).forEach(aliasName => {
-        params[aliasName].reject(message ? [message] : []);
+        params[aliasName].reject(...args);
     });
 };
 const sendRequest = (name, params, handler) => {
     const { query, variables } = buildQueryAndVariables(name, params);
-    handler(query, variables, createSuccessCallback(params), createErrorsCallback(params));
+    handler(query, variables, createResolveCallback(params), createRejectCallback(params));
 };
 
 class GraphQLClient {
@@ -61,12 +95,12 @@ class GraphQLClient {
             mutation: null,
         };
         this.wait = options.wait == null ? 50 : options.wait;
-        this.request = options.request;
+        this.handle = options.handle;
     }
-    query(query, decls) {
+    query(query, decls = {}) {
         return this.buffer("query", query, decls);
     }
-    mutation(query, decls) {
+    mutation(query, decls = {}) {
         return this.buffer("mutation", query, decls);
     }
     buffer(name, query, decls) {
@@ -85,7 +119,7 @@ class GraphQLClient {
         });
     }
     flush(name) {
-        sendRequest(name, this.buffers[name], this.request);
+        sendRequest(name, this.buffers[name], this.handle);
         this.buffers[name] = {};
         this.timerIds[name] = null;
     }

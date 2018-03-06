@@ -23,25 +23,57 @@ const buildQueryAndVariables = (name, params) => {
     const query = `${name}${defs}{\n${queries.join("\n")}\n}`;
     return { query, variables };
 };
-const createSuccessCallback = (params) => ({ data, errors, }) => {
+const createResolveCallback = (params) => ({ data, errors, }) => {
+    const payloads = {};
+    const nameMap = {};
     if (data) {
         Object.keys(data).forEach(aliasName => {
             const param = params[aliasName];
             const originalName = param.query.split(SELECTION_DELIMITER, 1)[0];
-            param.resolve({ [originalName]: data[aliasName] });
+            payloads[aliasName] = {
+                data: {
+                    [originalName]: data[aliasName],
+                },
+            };
+            nameMap[aliasName] = originalName;
         });
     }
     if (errors) {
-        // TODO: Implement
+        errors.forEach(error => {
+            if (error.fields && error.fields.length) {
+                const field = error.fields[0];
+                if (!nameMap[field]) {
+                    return; // Unknown field
+                }
+                if (!payloads[field]) {
+                    payloads[field] = {
+                        errors: [],
+                    };
+                }
+                if (!payloads[field].errors) {
+                    payloads[field].errors = [];
+                }
+                ;
+                payloads[field].errors.push({
+                    message: error.message,
+                    fields: [nameMap[field]].concat(error.fields.slice(1)),
+                });
+            }
+        });
     }
+    Object.keys(payloads).forEach(name => {
+        if (params[name]) {
+            params[name].resolve(payloads[name]);
+        }
+    });
 };
-const createErrorsCallback = (params) => (message) => {
+const createRejectCallback = (params) => (...args) => {
     Object.keys(params).forEach(aliasName => {
-        params[aliasName].reject(message ? [message] : []);
+        params[aliasName].reject(...args);
     });
 };
 export const sendRequest = (name, params, handler) => {
     const { query, variables } = buildQueryAndVariables(name, params);
-    handler(query, variables, createSuccessCallback(params), createErrorsCallback(params));
+    handler(query, variables, createResolveCallback(params), createRejectCallback(params));
 };
 //# sourceMappingURL=sendRequest.js.map

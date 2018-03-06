@@ -1,9 +1,13 @@
-export declare type RequestHandler = (query: string, variables: Variables, success: SuccessCallback, errors: ErrorsCallback) => void;
-export declare type SuccessCallback = (resp: {
+export declare type Handler = (query: string, variables: Variables, resolve: ResolveCallback, reject: RejectCallback) => void;
+export interface Error {
+    message: string;
+    fields?: string[];
+}
+export declare type ResolveCallback = (resp: {
     data?: any;
-    errors?: any;
+    errors?: Error[];
 }) => void;
-export declare type ErrorsCallback = (message?: string) => void;
+export declare type RejectCallback = (message: string) => void;
 export declare type OperationName = "query" | "mutation";
 export interface VariableDecls {
     [name: string]: {
@@ -22,4 +26,4 @@ export interface RequestParams {
         reject: (reason?: any) => void;
     };
 }
-export declare const sendRequest: (name: OperationName, params: RequestParams, handler: RequestHandler) => void;
+export declare const sendRequest: (name: OperationName, params: RequestParams, handler: Handler) => void;
