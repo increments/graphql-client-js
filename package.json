@@ -8,7 +8,7 @@
   "author": "Yuku TAKAHASHI <yuku@qiita.com>",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c",
+    "build": "(rm -fr dist || true) &&rollup -c",
     "format": "run-s format:tslint format:prettier",
     "format:prettier": "prettier --no-semi --trailing-comma all --parser typescript --write 'src/*.ts'",
     "format:tslint": "tslint --fix -p .",
