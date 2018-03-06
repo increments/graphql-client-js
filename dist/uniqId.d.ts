@@ -1,1 +1,1 @@
-export declare const uniqId: (name?: string | undefined) => string;
+export declare const uniqId: (name: string) => string;

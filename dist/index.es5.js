@@ -4,7 +4,7 @@ var GraphQLClient = (function (exports) {
 // Generate unique variable name
 const uniqId = (() => {
     let counter = 0;
-    return (name) => `${name || "id"}${counter++}`;
+    return (name) => `${name}${counter++}`;
 })();
 
 const SELECTION_DELIMITER = /\s|\(|{/;
