@@ -4,7 +4,7 @@
   "description": "A lightweight GraphQL client",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "repository": "git@github.com:increments/graphql-client.git",
+  "repository": "git@github.com:increments/graphql-client-js.git",
   "author": "Yuku TAKAHASHI <yuku@qiita.com>",
   "license": "MIT",
   "scripts": {
