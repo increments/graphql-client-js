@@ -26,4 +26,21 @@ export default [
       uglify(),
     ],
   },
+  {
+    input: "./src/index.ts",
+    output: {
+      file: "./dist/index.js",
+      format: 'es',
+      sourcemap: true,
+    },
+    plugins: [
+      typescript({
+        tsconfigOverride: {
+          compilerOptions: {
+            declaration: true,
+          }
+        }
+      }),
+    ],
+  }
 ]
