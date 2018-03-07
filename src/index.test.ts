@@ -129,7 +129,7 @@ describe("GraphQLClient", () => {
       wait: 0,
       handle(query, variables, resolve) {
         resolve({})
-      }
+      },
     })
 
     const spy1 = jest.fn()

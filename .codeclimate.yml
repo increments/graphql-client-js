@@ -3,7 +3,3 @@ checks:
   similar-code:
     config:
       threshold: 100
-plugins:
-  tslint:
-    enabled: true
-    config: tslint.json

@@ -12,10 +12,11 @@
     "format": "run-s format:tslint format:prettier",
     "format:prettier": "prettier --no-semi --trailing-comma all --parser typescript --write 'src/*.ts'",
     "format:tslint": "tslint --fix -p .",
+    "jest": "jest",
     "lint": "run-p lint:*",
     "lint:prettier": "prettier --no-semi --trailing-comma all -l --parser typescript 'src/*.ts' || (echo 'Need to run `yarn run format`' && exit 1)",
     "lint:tslint": "tslint --project .",
-    "test": "jest"
+    "test": "run-s lint jest"
   },
   "devDependencies": {
     "@types/jest": "^22.2.0",
