@@ -111,6 +111,10 @@ const createResolveCallback = (params: RequestParams): ResolveCallback => ({
       params[name].resolve(payloads[name])
     }
   })
+  // Resolve all unresolved promises
+  Object.keys(params).forEach(name => {
+    params[name].resolve({})
+  })
 }
 
 const createRejectCallback = (params: RequestParams): RejectCallback => (

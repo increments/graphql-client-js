@@ -1,5 +1,5 @@
 import { parse } from "graphql/language/parser"
-import { GraphQLClient } from "./GraphQLClient"
+import { GraphQLClient } from "./index"
 
 function shouldContainOnlyOneOperation(ast: any, name: string) {
   expect(ast.definitions.length).toBe(1)
@@ -124,7 +124,29 @@ describe("GraphQLClient", () => {
     }, 10)
   })
 
-  it("rejects all promise by calling errors callback", done => {
+  it("resolves all promises by calling resolve callback", done => {
+    const client = new GraphQLClient({
+      wait: 0,
+      handle(query, variables, resolve) {
+        resolve({})
+      }
+    })
+
+    const spy1 = jest.fn()
+    client.query("", {}).then(spy1)
+    const spy2 = jest.fn()
+    client.query("", {}).then(spy2)
+
+    setTimeout(() => {
+      expect(spy1.mock.calls.length).toBe(1)
+      expect(spy1.mock.calls[0][0]).toEqual({})
+      expect(spy2.mock.calls.length).toBe(1)
+      expect(spy2.mock.calls[0][0]).toEqual({})
+      done()
+    }, 10)
+  })
+
+  it("rejects all promise by calling reject callback", done => {
     const client = new GraphQLClient({
       wait: 0,
       handle: (query, variables, resolve, reject) => {
