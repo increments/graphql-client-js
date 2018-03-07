@@ -48,8 +48,8 @@ const createResolveCallback = (params) => ({ data, errors, }) => {
     }
     if (errors) {
         errors.forEach(error => {
-            if (error.fields && error.fields.length) {
-                const field = error.fields[0];
+            if (error.path && error.path.length) {
+                const field = error.path[0];
                 if (!nameMap[field]) {
                     return; // Unknown field
                 }
@@ -63,7 +63,7 @@ const createResolveCallback = (params) => ({ data, errors, }) => {
                 }
                 payloads[field].errors.push({
                     message: error.message,
-                    fields: [nameMap[field]].concat(error.fields.slice(1)),
+                    path: [nameMap[field]].concat(error.path.slice(1)),
                 });
             }
         });
@@ -72,6 +72,10 @@ const createResolveCallback = (params) => ({ data, errors, }) => {
         if (params[name]) {
             params[name].resolve(payloads[name]);
         }
+    });
+    // Resolve all unresolved promises
+    Object.keys(params).forEach(name => {
+        params[name].resolve({});
     });
 };
 const createRejectCallback = (params) => (...args) => {
