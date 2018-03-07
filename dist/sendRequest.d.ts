@@ -1,6 +1,10 @@
 export declare type Handler = (query: string, variables: Variables, resolve: ResolveCallback, reject: RejectCallback) => void;
 export interface Error {
     message: string;
+    locations?: {
+        line: number;
+        column: number;
+    }[];
     path?: string[];
 }
 export declare type ResolveCallback = (resp: {

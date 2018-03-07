@@ -8,6 +8,7 @@ export type Handler = (
 ) => void
 export interface Error {
   message: string
+  locations?: { line: number; column: number }[]
   path?: string[]
 }
 export type ResolveCallback = (resp: { data?: any; errors?: Error[] }) => void
