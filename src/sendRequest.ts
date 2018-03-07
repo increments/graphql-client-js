@@ -8,7 +8,7 @@ export type Handler = (
 ) => void
 export interface Error {
   message: string
-  fields?: string[]
+  path?: string[]
 }
 export type ResolveCallback = (resp: { data?: any; errors?: Error[] }) => void
 export type RejectCallback = (message: string) => void
@@ -86,8 +86,8 @@ const createResolveCallback = (params: RequestParams): ResolveCallback => ({
   }
   if (errors) {
     errors.forEach(error => {
-      if (error.fields && error.fields.length) {
-        const field = error.fields[0]
+      if (error.path && error.path.length) {
+        const field = error.path[0]
         if (!nameMap[field]) {
           return // Unknown field
         }
@@ -101,7 +101,7 @@ const createResolveCallback = (params: RequestParams): ResolveCallback => ({
         }
         ;(payloads[field].errors as Error[]).push({
           message: error.message,
-          fields: [nameMap[field]].concat(error.fields.slice(1)),
+          path: [nameMap[field]].concat(error.path.slice(1)),
         })
       }
     })

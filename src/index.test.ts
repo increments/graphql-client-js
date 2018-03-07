@@ -80,7 +80,7 @@ describe("GraphQLClient", () => {
           errors: [
             {
               message: "baz",
-              fields: [viewerAlias, "name"],
+              path: [viewerAlias, "name"],
             },
           ],
         })
@@ -116,7 +116,7 @@ describe("GraphQLClient", () => {
         errors: [
           {
             message: "baz",
-            fields: ["viewer", "name"],
+            path: ["viewer", "name"],
           },
         ],
       })

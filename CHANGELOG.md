@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to [keepachangelog.com](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- `errors` have `path` not `fields`
 
 ## [0.1.2] - 2018-03-07
 ### Fixed
