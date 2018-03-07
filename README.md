@@ -1,5 +1,6 @@
 # @increments/graphql-client
 
+[![NPM version](http://img.shields.io/npm/v/@increments/graphql-client.svg)](https://www.npmjs.com/package/@increments/graphql-client)
 [![Build Status](https://travis-ci.org/increments/graphql-client-js.svg?branch=master)](https://travis-ci.org/increments/graphql-client-js)
 [![Maintainability](https://api.codeclimate.com/v1/badges/456eb6c2b8dc26ff88bb/maintainability)](https://codeclimate.com/github/increments/graphql-client-js/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/456eb6c2b8dc26ff88bb/test_coverage)](https://codeclimate.com/github/increments/graphql-client-js/test_coverage)
@@ -11,7 +12,7 @@ A lightweight GraphQL client which bundles sequence of queries into a single HTT
 
 If your project is using npm, you can install [@increments/graphql-client](https://www.npmjs.com/package/@increments/graphql-client) package by npm command:
 
-```
+```bash
 npm install --save @increments/graphql-client
 # or
 yarn add @increments/graphql-client
@@ -36,8 +37,8 @@ const client = new GraphQLClient({
    *
    * @param {string} query - Bundled GraphQL query string.
    * @param {Object} variables - Bundled variables.
-   * @param {Function} success - Callback for successful response.
-   * @param {Function} error - Callback for failure response.
+   * @param {Function} resolve - Callback for successful response.
+   * @param {Function} reject - Callback for failure response.
    */
   handle(query, variables, resolve, reject) {
     // Send a HTTP request to your GraphQL server in your favorite way.
