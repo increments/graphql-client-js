@@ -35,14 +35,13 @@
   "jest": {
     "moduleFileExtensions": [
       "js",
-      "ts",
-      "tsx"
+      "ts"
     ],
     "testMatch": [
-      "**/?(*.)test.(js|ts)?(x)"
+      "**/?(*.)test.ts"
     ],
     "transform": {
-      "^.+\\.tsx?$": "./node_modules/ts-jest/preprocessor.js"
+      "^.+\\.ts$": "./node_modules/ts-jest/preprocessor.js"
     },
     "collectCoverage": true
   }
