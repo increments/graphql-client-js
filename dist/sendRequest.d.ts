@@ -6,6 +6,7 @@ export interface Error {
         column: number;
     }[];
     path?: string[];
+    extensions?: any;
 }
 export declare type ResolveCallback = (resp: {
     data?: any;

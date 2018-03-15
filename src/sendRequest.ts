@@ -10,6 +10,7 @@ export interface Error {
   message: string
   locations?: { line: number; column: number }[]
   path?: string[]
+  extensions?: any
 }
 export type ResolveCallback = (resp: { data?: any; errors?: Error[] }) => void
 export type RejectCallback = (message: string) => void
