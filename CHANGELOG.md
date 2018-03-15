@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to [keepachangelog.com](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [0.1.6] - 2018-03-15
 ### Changed
 - CommonJS for default import file.
 
@@ -34,7 +36,8 @@ This change log adheres to [keepachangelog.com](http://keepachangelog.com).
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/increments/graphql-client-js/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/increments/graphql-client-js/compare/v0.1.6...HEAD
+[0.1.6]: https://github.com/increments/graphql-client-js/compare/v0.1.5...v0.1.6
 [0.1.5]: https://github.com/increments/graphql-client-js/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/increments/graphql-client-js/compare/v0.1.2...v0.1.4
 [0.1.2]: https://github.com/increments/graphql-client-js/compare/v0.1.1...v0.1.2
