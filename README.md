@@ -20,7 +20,8 @@ yarn add @increments/graphql-client
 
 ### Distribution files
 
-- **dist/index.js** -  The native modules version of this package.
+- **dist/index.js** -  The CommonJS version of this package. (default)
+- **dist/index.es.js** -  The native modules version of this package.
 - **dist/graphql-client.es5.js** - ES5 / UMD version of this package. This version exports itself to `window.GraphQLClient`.
 
 ## Synopsis

@@ -1,7 +1,3 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
 // Generate unique variable name
 const uniqId = (() => {
     let counter = 0;
@@ -130,5 +126,5 @@ class GraphQLClient {
     }
 }
 
-exports.GraphQLClient = GraphQLClient;
-//# sourceMappingURL=index.js.map
+export { GraphQLClient };
+//# sourceMappingURL=index.es.js.map

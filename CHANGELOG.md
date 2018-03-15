@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to [keepachangelog.com](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- CommonJS for default import file.
 
 ## [0.1.5] - 2018-03-15
 ### Fixed
