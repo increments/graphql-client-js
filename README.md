@@ -24,6 +24,13 @@ yarn add @increments/graphql-client
 - **dist/index.es.js** -  The native modules version of this package.
 - **dist/graphql-client.es5.js** - ES5 / UMD version of this package. This version exports itself to `window.GraphQLClient`.
 
+## Size
+
+Package | min.js.gz size
+--------|----------------
+@increments/graphql-client | 800 B
+[apollo-client](https://github.com/apollographql/apollo-client) (apollo-client-preset + graphql-tag + graphql) | 29 KB
+
 ## Synopsis
 
 ```js
