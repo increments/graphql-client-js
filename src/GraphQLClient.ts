@@ -30,14 +30,14 @@ export class GraphQLClient {
     query: string,
     decls: VariableDecls = {},
   ): Promise<{ data?: T; errors?: GraphQLError[] }> {
-    return this.buffer("query", query, decls)
+    return this.buffer("query", query.trim(), decls)
   }
 
   public mutation<T>(
     query: string,
     decls: VariableDecls = {},
   ): Promise<{ data?: T; errors?: GraphQLError[] }> {
-    return this.buffer("mutation", query, decls)
+    return this.buffer("mutation", query.trim(), decls)
   }
 
   private buffer<T>(

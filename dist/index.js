@@ -100,10 +100,10 @@ class GraphQLClient {
         this.handle = options.handle;
     }
     query(query, decls = {}) {
-        return this.buffer("query", query, decls);
+        return this.buffer("query", query.trim(), decls);
     }
     mutation(query, decls = {}) {
-        return this.buffer("mutation", query, decls);
+        return this.buffer("mutation", query.trim(), decls);
     }
     buffer(name, query, decls) {
         return new Promise((resolve, reject) => {

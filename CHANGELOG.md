@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to [keepachangelog.com](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- Enable to handle query starts with new line char 
 
 ## [0.2.0] - 2018-04-06
 ### Added

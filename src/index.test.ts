@@ -93,9 +93,9 @@ describe("GraphQLClient", () => {
 
     const spy1 = jest.fn()
     const query = `
-    user(name: $name) {
-      id
-    }
+      user(name: $name) {
+        id
+      }
     `
 
     client
