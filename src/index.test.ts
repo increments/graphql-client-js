@@ -1,5 +1,8 @@
+import { FieldNode, OperationDefinitionNode } from "graphql"
 import { parse } from "graphql/language/parser"
 import { GraphQLClient } from "./index"
+
+const wait = async ms => new Promise(resolve => setTimeout(resolve, ms))
 
 function shouldContainOnlyOneOperation(ast: any, name: string) {
   expect(ast.definitions.length).toBe(1)
@@ -38,7 +41,7 @@ function shouldHaveVariable(
 }
 
 describe("GraphQLClient", () => {
-  it("bundles sequence of method calls to a single request", done => {
+  it("bundles sequence of method calls to a single request", async done => {
     const handle = jest.fn()
     const client = new GraphQLClient({ wait: 0, handle })
 
@@ -46,13 +49,12 @@ describe("GraphQLClient", () => {
     client.query("")
     client.query("")
 
-    setTimeout(() => {
-      expect(handle.mock.calls.length).toBe(1)
-      done()
-    }, 10)
+    await wait(10)
+    expect(handle.mock.calls.length).toBe(1)
+    done()
   })
 
-  it("calls request with valid graphql query and variables", done => {
+  it("calls request with valid graphql query and variables", async done => {
     const client = new GraphQLClient({
       wait: 0,
       handle: (query, variables, resolve) => {
@@ -65,10 +67,12 @@ describe("GraphQLClient", () => {
         shouldHaveVariable(ast.definitions[0], variables, 0, "foo")
 
         shouldHaveSelectionNames(ast.definitions[0], ["user", "viewer"])
-        const userAlias =
-          ast.definitions[0].selectionSet.selections[0].alias.value
-        const viewerAlias =
-          ast.definitions[0].selectionSet.selections[1].alias.value
+        const definition = ast.definitions[0] as OperationDefinitionNode
+        const selections = definition.selectionSet.selections as ReadonlyArray<
+          FieldNode
+        >
+        const userAlias = selections[0].alias.value
+        const viewerAlias = selections[1].alias.value
 
         resolve({
           data: {
@@ -81,7 +85,7 @@ describe("GraphQLClient", () => {
             {
               message: "baz",
               path: [viewerAlias, "name"],
-            },
+            } as any,
           ],
         })
       },
@@ -99,32 +103,31 @@ describe("GraphQLClient", () => {
     const spy2 = jest.fn()
     client.query("viewer { name }").then(spy2)
 
-    setTimeout(() => {
-      expect(spy1.mock.calls.length).toBe(1)
-      expect(spy1.mock.calls[0][0]).toEqual({
-        data: {
-          user: {
-            id: "bar",
-          },
+    await wait(10)
+    expect(spy1.mock.calls.length).toBe(1)
+    expect(spy1.mock.calls[0][0]).toEqual({
+      data: {
+        user: {
+          id: "bar",
         },
-      })
-      expect(spy2.mock.calls.length).toBe(1)
-      expect(spy2.mock.calls[0][0]).toEqual({
-        data: {
-          viewer: null,
+      },
+    })
+    expect(spy2.mock.calls.length).toBe(1)
+    expect(spy2.mock.calls[0][0]).toEqual({
+      data: {
+        viewer: null,
+      },
+      errors: [
+        {
+          message: "baz",
+          path: ["viewer", "name"],
         },
-        errors: [
-          {
-            message: "baz",
-            path: ["viewer", "name"],
-          },
-        ],
-      })
-      done()
-    }, 10)
+      ],
+    })
+    done()
   })
 
-  it("resolves all promises by calling resolve callback", done => {
+  it("resolves all promises by calling resolve callback", async done => {
     const client = new GraphQLClient({
       wait: 0,
       handle(query, variables, resolve) {
@@ -137,16 +140,15 @@ describe("GraphQLClient", () => {
     const spy2 = jest.fn()
     client.query("", {}).then(spy2)
 
-    setTimeout(() => {
-      expect(spy1.mock.calls.length).toBe(1)
-      expect(spy1.mock.calls[0][0]).toEqual({})
-      expect(spy2.mock.calls.length).toBe(1)
-      expect(spy2.mock.calls[0][0]).toEqual({})
-      done()
-    }, 10)
+    await wait(10)
+    expect(spy1.mock.calls.length).toBe(1)
+    expect(spy1.mock.calls[0][0]).toEqual({})
+    expect(spy2.mock.calls.length).toBe(1)
+    expect(spy2.mock.calls[0][0]).toEqual({})
+    done()
   })
 
-  it("rejects all promise by calling reject callback", done => {
+  it("rejects all promise by calling reject callback", async done => {
     const client = new GraphQLClient({
       wait: 0,
       handle: (query, variables, resolve, reject) => {
@@ -159,25 +161,23 @@ describe("GraphQLClient", () => {
     const spy2 = jest.fn()
     client.query("", {}).catch(spy2)
 
-    setTimeout(() => {
-      expect(spy1.mock.calls.length).toBe(1)
-      expect(spy1.mock.calls[0][0]).toEqual("hello")
-      expect(spy2.mock.calls.length).toBe(1)
-      expect(spy2.mock.calls[0][0]).toEqual("hello")
-      done()
-    }, 10)
+    await wait(10)
+    expect(spy1.mock.calls.length).toBe(1)
+    expect(spy1.mock.calls[0][0]).toEqual("hello")
+    expect(spy2.mock.calls.length).toBe(1)
+    expect(spy2.mock.calls[0][0]).toEqual("hello")
+    done()
   })
 
-  it("treats #query and #mutation separatly", done => {
+  it("treats #query and #mutation separatly", async done => {
     const handle = jest.fn()
     const client = new GraphQLClient({ wait: 0, handle })
 
     client.query("")
     client.mutation("")
 
-    setTimeout(() => {
-      expect(handle.mock.calls.length).toBe(2)
-      done()
-    }, 10)
+    await wait(10)
+    expect(handle.mock.calls.length).toBe(2)
+    done()
   })
 })
