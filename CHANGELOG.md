@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to [keepachangelog.com](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [0.2.1] - 2018-04-06
 ### Fixed
 - Enable to handle query starts with new line char 
 
@@ -42,7 +44,9 @@ This change log adheres to [keepachangelog.com](http://keepachangelog.com).
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/increments/graphql-client-js/compare/v0.1.6...HEAD
+[Unreleased]: https://github.com/increments/graphql-client-js/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/increments/graphql-client-js/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/increments/graphql-client-js/compare/v0.1.6...v0.2.0
 [0.1.6]: https://github.com/increments/graphql-client-js/compare/v0.1.5...v0.1.6
 [0.1.5]: https://github.com/increments/graphql-client-js/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/increments/graphql-client-js/compare/v0.1.2...v0.1.4
