@@ -58,10 +58,7 @@ const createResolveCallback = (params) => ({ data, errors, }) => {
                 if (!payloads[field].errors) {
                     payloads[field].errors = [];
                 }
-                payloads[field].errors.push({
-                    message: error.message,
-                    path: [nameMap[field]].concat(error.path.slice(1)),
-                });
+                payloads[field].errors.push(Object.assign({}, error, { path: [nameMap[field]].concat(error.path.slice(1)) }));
             }
         });
     }

@@ -1,16 +1,8 @@
+import { GraphQLError } from "graphql";
 export declare type Handler = (query: string, variables: Variables, resolve: ResolveCallback, reject: RejectCallback) => void;
-export interface Error {
-    message: string;
-    locations?: {
-        line: number;
-        column: number;
-    }[];
-    path?: string[];
-    extensions?: any;
-}
 export declare type ResolveCallback = (resp: {
     data?: any;
-    errors?: Error[];
+    errors?: GraphQLError[];
 }) => void;
 export declare type RejectCallback = (message: string) => void;
 export declare type OperationName = "query" | "mutation";

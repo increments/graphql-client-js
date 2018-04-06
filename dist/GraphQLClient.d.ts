@@ -1,4 +1,5 @@
-import { Error, Handler, VariableDecls } from "./sendRequest";
+import { GraphQLError } from "graphql";
+import { Handler, VariableDecls } from "./sendRequest";
 export declare class GraphQLClient {
     private wait;
     private handle;
@@ -10,11 +11,11 @@ export declare class GraphQLClient {
     });
     query<T>(query: string, decls?: VariableDecls): Promise<{
         data?: T;
-        errors?: Error[];
+        errors?: GraphQLError[];
     }>;
     mutation<T>(query: string, decls?: VariableDecls): Promise<{
         data?: T;
-        errors?: Error[];
+        errors?: GraphQLError[];
     }>;
     private buffer<T>(name, query, decls);
     private flush(name);

@@ -1,3 +1,5 @@
+import { GraphQLError } from "graphql"
+
 import { uniqId } from "./uniqId"
 
 export type Handler = (
@@ -6,14 +8,13 @@ export type Handler = (
   resolve: ResolveCallback,
   reject: RejectCallback,
 ) => void
-export interface Error {
-  message: string
-  locations?: { line: number; column: number }[]
-  path?: string[]
-  extensions?: any
-}
-export type ResolveCallback = (resp: { data?: any; errors?: Error[] }) => void
+
+export type ResolveCallback = (
+  resp: { data?: any; errors?: GraphQLError[] },
+) => void
+
 export type RejectCallback = (message: string) => void
+
 export type OperationName = "query" | "mutation"
 
 export interface VariableDecls {
@@ -71,7 +72,9 @@ const createResolveCallback = (params: RequestParams): ResolveCallback => ({
   data,
   errors,
 }) => {
-  const payloads: { [name: string]: { data?: any; errors?: Error[] } } = {}
+  const payloads: {
+    [name: string]: { data?: any; errors?: GraphQLError[] }
+  } = {}
   const nameMap: { [aliasName: string]: string } = {}
 
   if (data) {
@@ -101,9 +104,9 @@ const createResolveCallback = (params: RequestParams): ResolveCallback => ({
         if (!payloads[field].errors) {
           payloads[field].errors = []
         }
-        ;(payloads[field].errors as Error[]).push({
-          message: error.message,
-          path: [nameMap[field]].concat(error.path.slice(1)),
+        payloads[field].errors!.push({
+          ...error,
+          path: [nameMap[field]].concat(error.path.slice(1) as any),
         })
       }
     })

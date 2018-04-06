@@ -6,7 +6,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/456eb6c2b8dc26ff88bb/test_coverage)](https://codeclimate.com/github/increments/graphql-client-js/test_coverage)
 [![Stable Release Size](http://img.badgesize.io/https://unpkg.com/@increments/graphql-client/dist/graphql-client.es5.min.js?compression=gzip)](https://github.com/ngryman/badge-size)
 
-A lightweight GraphQL client which bundles sequence of queries into a single HTTP request. Zero dependency.
+A lightweight GraphQL client which bundles sequence of queries into a single HTTP request.
 
 ## Installation
 

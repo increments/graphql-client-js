@@ -1,5 +1,6 @@
+import { GraphQLError } from "graphql"
+
 import {
-  Error,
   Handler,
   OperationName,
   RequestParams,
@@ -28,14 +29,14 @@ export class GraphQLClient {
   public query<T>(
     query: string,
     decls: VariableDecls = {},
-  ): Promise<{ data?: T; errors?: Error[] }> {
+  ): Promise<{ data?: T; errors?: GraphQLError[] }> {
     return this.buffer("query", query, decls)
   }
 
   public mutation<T>(
     query: string,
     decls: VariableDecls = {},
-  ): Promise<{ data?: T; errors?: Error[] }> {
+  ): Promise<{ data?: T; errors?: GraphQLError[] }> {
     return this.buffer("mutation", query, decls)
   }
 

@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to [keepachangelog.com](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- Add `@types/graphql` as dependencies.
 
 ## [0.1.6] - 2018-03-15
 ### Changed
