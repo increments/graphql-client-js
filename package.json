@@ -1,6 +1,6 @@
 {
   "name": "@increments/graphql-client",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "A lightweight GraphQL client",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",

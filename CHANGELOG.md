@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to [keepachangelog.com](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [0.3.0] - 2018-04-18
 ### Changed
 - Change distribution file format
 
@@ -46,7 +48,8 @@ This change log adheres to [keepachangelog.com](http://keepachangelog.com).
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/increments/graphql-client-js/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/increments/graphql-client-js/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/increments/graphql-client-js/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/increments/graphql-client-js/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/increments/graphql-client-js/compare/v0.1.6...v0.2.0
 [0.1.6]: https://github.com/increments/graphql-client-js/compare/v0.1.5...v0.1.6
