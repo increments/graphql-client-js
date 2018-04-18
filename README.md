@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/increments/graphql-client-js.svg?branch=master)](https://travis-ci.org/increments/graphql-client-js)
 [![Maintainability](https://api.codeclimate.com/v1/badges/456eb6c2b8dc26ff88bb/maintainability)](https://codeclimate.com/github/increments/graphql-client-js/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/456eb6c2b8dc26ff88bb/test_coverage)](https://codeclimate.com/github/increments/graphql-client-js/test_coverage)
-[![Stable Release Size](http://img.badgesize.io/https://unpkg.com/@increments/graphql-client/dist/graphql-client.es5.min.js?compression=gzip)](https://github.com/ngryman/badge-size)
+[![Stable Release Size](http://img.badgesize.io/https://unpkg.com/@increments/graphql-client/dist/graphql-client.min.js?compression=gzip)](https://github.com/ngryman/badge-size)
 
 A lightweight GraphQL client which bundles sequence of queries into a single HTTP request.
 
@@ -20,9 +20,8 @@ yarn add @increments/graphql-client
 
 ### Distribution files
 
-- **dist/index.js** -  The CommonJS version of this package. (default)
-- **dist/index.es.js** -  The native modules version of this package.
-- **dist/graphql-client.es5.js** - ES5 / UMD version of this package. This version exports itself to `window.GraphQLClient`.
+- **dist/graphql-client.js** - ES5 / IIFE version of this package. This version exports itself to `window.GraphQLClient`.
+- **dist/graphql-client.min.js** - Minified version.
 
 ## Size
 

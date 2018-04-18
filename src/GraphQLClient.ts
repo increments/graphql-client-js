@@ -1,12 +1,6 @@
 import { GraphQLError } from "graphql"
 
-import {
-  Handler,
-  OperationName,
-  RequestParams,
-  sendRequest,
-  VariableDecls,
-} from "./sendRequest"
+import { Handler, OperationName, RequestParams, sendRequest, VariableDecls } from "./sendRequest"
 import { uniqId } from "./uniqId"
 
 export class GraphQLClient {
@@ -14,11 +8,11 @@ export class GraphQLClient {
   private handle: Handler
   private buffers: { [operation in OperationName]: RequestParams } = {
     query: {},
-    mutation: {},
+    mutation: {}
   }
   private timerIds: { [operation in OperationName]: number | null } = {
     query: null,
-    mutation: null,
+    mutation: null
   }
 
   constructor(options: { wait?: number; handle: Handler }) {
@@ -26,31 +20,21 @@ export class GraphQLClient {
     this.handle = options.handle
   }
 
-  public query<T>(
-    query: string,
-    decls: VariableDecls = {},
-  ): Promise<{ data?: T; errors?: GraphQLError[] }> {
+  public query<T>(query: string, decls: VariableDecls = {}): Promise<{ data?: T; errors?: GraphQLError[] }> {
     return this.buffer("query", query.trim(), decls)
   }
 
-  public mutation<T>(
-    query: string,
-    decls: VariableDecls = {},
-  ): Promise<{ data?: T; errors?: GraphQLError[] }> {
+  public mutation<T>(query: string, decls: VariableDecls = {}): Promise<{ data?: T; errors?: GraphQLError[] }> {
     return this.buffer("mutation", query.trim(), decls)
   }
 
-  private buffer<T>(
-    name: OperationName,
-    query: string,
-    decls: VariableDecls,
-  ): Promise<T> {
+  private buffer<T>(name: OperationName, query: string, decls: VariableDecls): Promise<T> {
     return new Promise((resolve, reject) => {
       this.buffers[name][uniqId("alias")] = {
         query,
         decls,
         resolve,
-        reject,
+        reject
       }
       if (!this.timerIds[name]) {
         this.timerIds[name] = setTimeout(() => {

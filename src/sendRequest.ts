@@ -2,16 +2,9 @@ import { GraphQLError } from "graphql"
 
 import { uniqId } from "./uniqId"
 
-export type Handler = (
-  query: string,
-  variables: Variables,
-  resolve: ResolveCallback,
-  reject: RejectCallback,
-) => void
+export type Handler = (query: string, variables: Variables, resolve: ResolveCallback, reject: RejectCallback) => void
 
-export type ResolveCallback = (
-  resp: { data?: any; errors?: GraphQLError[] },
-) => void
+export type ResolveCallback = (resp: { data?: any; errors?: GraphQLError[] }) => void
 
 export type RejectCallback = (message: string) => void
 
@@ -41,7 +34,7 @@ const SELECTION_DELIMITER = /\s|\(|{/
 
 const buildQueryAndVariables = (
   name: OperationName,
-  params: RequestParams,
+  params: RequestParams
 ): { query: string; variables: Variables } => {
   const queries: string[] = []
   const variableDefinitions: string[] = []
@@ -61,17 +54,12 @@ const buildQueryAndVariables = (
     queries.push(`${aliasName}:${query}`)
   })
 
-  const defs = variableDefinitions.length
-    ? `(${variableDefinitions.join(",")})`
-    : ""
+  const defs = variableDefinitions.length ? `(${variableDefinitions.join(",")})` : ""
   const query = `${name}${defs}{\n${queries.join("\n")}\n}`
   return { query, variables }
 }
 
-const createResolveCallback = (params: RequestParams): ResolveCallback => ({
-  data,
-  errors,
-}) => {
+const createResolveCallback = (params: RequestParams): ResolveCallback => ({ data, errors }) => {
   const payloads: {
     [name: string]: { data?: any; errors?: GraphQLError[] }
   } = {}
@@ -83,8 +71,8 @@ const createResolveCallback = (params: RequestParams): ResolveCallback => ({
       const originalName = param.query.split(SELECTION_DELIMITER, 1)[0]
       payloads[aliasName] = {
         data: {
-          [originalName]: data[aliasName],
-        },
+          [originalName]: data[aliasName]
+        }
       }
       nameMap[aliasName] = originalName
     })
@@ -98,7 +86,7 @@ const createResolveCallback = (params: RequestParams): ResolveCallback => ({
         }
         if (!payloads[field]) {
           payloads[field] = {
-            errors: [],
+            errors: []
           }
         }
         if (!payloads[field].errors) {
@@ -106,7 +94,7 @@ const createResolveCallback = (params: RequestParams): ResolveCallback => ({
         }
         payloads[field].errors!.push({
           ...error,
-          path: [nameMap[field]].concat(error.path.slice(1) as any),
+          path: [nameMap[field]].concat(error.path.slice(1) as any)
         })
       }
     })
@@ -122,24 +110,13 @@ const createResolveCallback = (params: RequestParams): ResolveCallback => ({
   })
 }
 
-const createRejectCallback = (params: RequestParams): RejectCallback => (
-  ...args: any[]
-) => {
+const createRejectCallback = (params: RequestParams): RejectCallback => (...args: any[]) => {
   Object.keys(params).forEach(aliasName => {
     params[aliasName].reject(...args)
   })
 }
 
-export const sendRequest = (
-  name: OperationName,
-  params: RequestParams,
-  handler: Handler,
-): void => {
+export const sendRequest = (name: OperationName, params: RequestParams, handler: Handler): void => {
   const { query, variables } = buildQueryAndVariables(name, params)
-  handler(
-    query,
-    variables,
-    createResolveCallback(params),
-    createRejectCallback(params),
-  )
+  handler(query, variables, createResolveCallback(params), createRejectCallback(params))
 }

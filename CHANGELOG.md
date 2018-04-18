@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to [keepachangelog.com](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- Change distribution file format
 
 ## [0.2.1] - 2018-04-06
 ### Fixed

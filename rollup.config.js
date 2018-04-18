@@ -5,59 +5,47 @@ export default [
   {
     input: "./src/index.ts",
     output: {
-      file: "./dist/graphql-client.es5.js",
-      format: "iife",
-      name: "GraphQLClient",
-      sourcemap: true,
+      file: "./lib/index.js",
+      format: "cjs",
+      sourcemap: true
     },
-    plugins: [
-      typescript(),
-    ],
+    plugins: [typescript()]
   },
   {
     input: "./src/index.ts",
     output: {
-      file: "./dist/graphql-client.es5.min.js",
+      file: "./dist/graphql-client.js",
       format: "iife",
       name: "GraphQLClient",
-    },
-    plugins: [
-      typescript(),
-      uglify(),
-    ],
-  },
-  {
-    input: "./src/index.ts",
-    output: {
-      file: "./dist/index.es.js",
-      format: 'es',
-      sourcemap: true,
+      sourcemap: false
     },
     plugins: [
       typescript({
         tsconfigOverride: {
           compilerOptions: {
-            declaration: true,
+            declaration: true
           }
         }
-      }),
-    ],
+      })
+    ]
   },
   {
     input: "./src/index.ts",
     output: {
-      file: "./dist/index.js",
-      format: 'cjs',
-      sourcemap: true,
+      file: "./dist/graphql-client.min.js",
+      format: "iife",
+      name: "GraphQLClient",
+      sourcemap: false
     },
     plugins: [
       typescript({
         tsconfigOverride: {
           compilerOptions: {
-            declaration: true,
+            declaration: true
           }
         }
       }),
-    ],
+      uglify()
+    ]
   }
 ]
